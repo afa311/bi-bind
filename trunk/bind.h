@@ -275,6 +275,7 @@ namespace bi
     struct list0
     {
         inline void operator[](Argc<0>(*)()) const{};
+        inline void operator[](Argc<0>) const{};
 
         template<typename R, typename F, typename L>
         inline R operator()(type<R>, F &f, const L&)
@@ -452,7 +453,7 @@ namespace bi
         inline R operator()(type<R>, F &f, const L &l)
         {
             D &d = static_cast<D&>(*this); d; //used C4189
-            return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4]);
+            return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
         }
 
         template<typename R, typename F, typename L>
@@ -502,14 +503,14 @@ namespace bi
         inline R operator()(type<R>, F &f, const L &l)
         {
             D &d = static_cast<D&>(*this); d; //used C4189
-            return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5]);
+            return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_]);
         }
 
         template<typename R, typename F, typename L>
         inline R operator()(type<R>, F &f, const L &l) const
         {
             const D &d = static_cast<const D&>(*this); d; //used C4189
-            return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4], l[d.a5]);
+            return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4], l[d.a5_]);
         }
     };
 
@@ -1168,7 +1169,7 @@ namespace bi
         inline result_type operator()(P1 &p1, P2 &p2)
         {
             typedef list2<P1&, P2&> ll;
-            return l_(type<result_type>(), f_, ll(p1, p2));
+            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
         }
 
         template<typename P1, typename P2>
