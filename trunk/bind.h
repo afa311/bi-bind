@@ -299,14 +299,14 @@ namespace bi
         template<typename R, typename F, typename L>
         inline R operator()(type<R>, F &f, const L &l)
         {
-            D &d = static_cast<D&>(*this); d; //used
+            D &d = static_cast<D&>(*this); d;  //used C4189
             return f(l[d.a1_]);
         }
 
         template<typename R, typename F, typename L>
         inline R operator()(type<R>, F &f, const L &l) const
         {
-            const D &d = static_cast<const D&>(*this); d; //used
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
             return f(l[d.a1_]);
         }
     };
@@ -321,6 +321,7 @@ namespace bi
 
         explicit list1(P1 p1) : a1_(p1) {}
         inline P1 operator[](Argc<1>(*)()) const { return a1_;}
+        inline P1 operator[](Argc<1>) const { return a1_;}
 
         A1 a1_;
     };
@@ -371,6 +372,7 @@ namespace bi
         list2(typename base::P1 p1, P2 p2) : base(p1), a2_(p2) {}
 
         inline P2 operator[](Argc<2> (*)()) const { return a2_; }
+        inline P2 operator[](Argc<2>) const { return a2_;}
 
         A2 a2_;
     };
@@ -421,6 +423,7 @@ namespace bi
         list3(typename base::P1 p1, typename base::P2 p2, P3 p3) : base(p1, p2), a3_(p3) {}
 
         inline P3 operator[](Argc<3> (*)()) const { return a3_; }
+        inline P3 operator[](Argc<3>) const { return a3_;}
 
         A3 a3_;
     };
@@ -470,6 +473,7 @@ namespace bi
         list4(typename base::P1 p1, typename base::P2 p2, typename base::P3 p3, P4 p4) : base(p1, p2, p3), a4_(p4) {}
 
         inline P4 operator[](Argc<4>(*)()) const { return a4_; }
+        inline P4 operator[](Argc<4>) const { return a4_;}
 
         A4 a4_;
     };
@@ -519,6 +523,7 @@ namespace bi
         list5(typename base::P1 p1, typename base::P2 p2, typename base::P3 p3, typename base::P4 p4, P5 p5) : base(p1, p2, p3, p4), a5_(p5) { }
 
         inline P5 operator[](Argc<5> (*)()) const { return a5_; }
+        inline P5 operator[](Argc<5>) const { return a5_;}
 
         A5 a5_;
     };
@@ -568,6 +573,7 @@ namespace bi
         list6(typename base::P1 p1, typename base::P2 p2, typename base::P3 p3, typename base::P4 p4, typename base::P5 p5, P6 p6) : base(p1, p2, p3, p4, p5), a6_(p6) {}
 
         inline P6 operator[](Argc<6> (*)()) const { return a6_; }
+        inline P6 operator[](Argc<6>) const { return a6_;}
 
         A6 a6_;
     };
@@ -617,6 +623,7 @@ namespace bi
         list7(typename base::P1 p1, typename base::P2 p2, typename base::P3 p3, typename base::P4 p4, typename base::P5 p5, typename base::P6 p6, P7 p7) : base(p1, p2, p3, p4, p5, p6), a7_(p7) {}
 
         inline P7 operator[](Argc<7> (*)()) const { return a7_; }
+        inline P7 operator[](Argc<7>) const { return a7_;}
 
         A7 a7_;
     };
@@ -666,6 +673,7 @@ namespace bi
         list8(typename base::P1 p1, typename base::P2 p2, typename base::P3 p3, typename base::P4 p4, typename base::P5 p5, typename base::P6 p6, typename base::P7 p7, P8 p8) : base(p1, p2, p3, p4, p5, p6, p7), a8_(p8) {}
 
         inline P8 operator[](Argc<8> (*)()) const { return a8_; }
+        inline P8 operator[](Argc<8>) const { return a8_;}
 
         A8 a8_;
     };
@@ -715,6 +723,8 @@ namespace bi
         list9(typename base::P1 p1, typename base::P2 p2, typename base::P3 p3, typename base::P4 p4, typename base::P5 p5, typename base::P6 p6, typename base::P7 p7, typename base::P8 p8, P9 p9) : base(p1, p2, p3, p4, p5, p6, p7, p8), a9_(p9) {}
 
         inline P9 operator[](Argc<9> (*)()) const { return a9_; }
+        inline P9 operator[](Argc<9>) const { return a9_;}
+
         A9 a9_;
     };
 
