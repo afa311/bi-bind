@@ -14,9 +14,9 @@ namespace bi
     template<int I> struct Argc{};
     template<typename T> struct type{};
     template<typename R, typename F, typename L> struct bind_t;
+    template<typename R, typename C, typename L> struct mem_bind_t;
 
-    template<typename T>
-    struct untie_ref
+    template<typename T> struct untie_ref
     {
         typedef T type;
     };
@@ -33,8 +33,7 @@ namespace bi
     };
     template<class F> struct result_traits<type<F> > : result_traits<typename F::result_type> {};
 
-    template<typename R, typename F>
-    struct f_i
+    template<typename R, typename F> struct f_i
     {
         typedef typename result_traits<R>::type result_type;
 
@@ -1104,8 +1103,7 @@ namespace bi
         return bind_t<R, F, L>(F(f), L(c1, p1, p2, p3, p4, p5, p6, p7, p8));
     }
 
-    template<typename R, typename F, typename L>
-    struct bind_t
+    template<typename R, typename F, typename L> struct bind_t
     {
     public:
         typedef typename result_traits<R>::type result_type;
@@ -1421,6 +1419,181 @@ namespace bi
         F f_;
         L l_;
     };
+
+    template<typename D>
+    struct mem_list_b : list0
+    {
+        typedef list0 base;
+
+        template<typename R, typename O, typename L>
+        inline R operator()(type<R>, const O &o, const L &l)
+        {
+            D &d = static_cast<D&>(*this); d;  //used C4189
+            return o(l[d.a_]);
+        }
+
+        template<typename R, typename O, typename L>
+        inline R operator()(type<R>, const O &o, const L &l) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return o(l[d.a_]);
+        }
+    };
+
+    template<typename A>
+    struct mem_list : mem_list_b<mem_list<A> >
+    {
+        typedef mem_list_b<mem_list<A> > base;
+        typedef typename param_traits<A>::type P;
+
+        using base::operator[];
+
+        explicit mem_list(P p) : a_(p) {}
+        inline P operator[](Argc<1>(*)()) const { return a_;}
+        inline P operator[](Argc<1>) const { return a_;}
+
+        A a_;
+    };
+
+    template<int I>
+    struct mem_list<Argc<I>(*)()> : mem_list_b<mem_list<Argc<I>(*)()> >
+    {
+        typedef mem_list_b<mem_list<Argc<I>(*)()> > base;
+        typedef typename param_traits<Argc<I>(*)()>::type P;
+
+        using base::operator[];
+
+        explicit mem_list(P){}
+        static Argc<I> a_() {return Argc<I>();}
+    };
+
+    template<typename lt>
+    struct mem_list_av : lt
+    {
+        typedef lt base;
+        mem_list_av(const lt &ll) : base(ll) {}
+
+        using base::operator[];
+
+        template<typename R, typename C, typename L>
+        inline R operator[](const mem_bind_t<R, C, L> &b) const 
+        { 
+            return b.eval(*this);
+        }
+
+        template<typename R, typename C, typename L>
+        inline R operator[](mem_bind_t<R, C, L> &b) const 
+        { 
+            return b.eval(*this);
+        }
+    };
+
+    template<typename R, typename M> struct mem_object_t
+    {
+        typedef typename result_traits<R>::type result_type;
+
+        mem_object_t(const M &m) : m_(m){}
+
+        template<typename T> 
+        inline result_type operator()(T &t) const { return t.*m_; }
+
+        template<typename T> 
+        inline const result_type operator()(const T &t) const { return t.*m_; }
+
+        template<typename T> 
+        inline result_type operator()(T *t) const { return t->*m_; }
+
+        template<typename T> 
+        inline const result_type operator()(const T *t) const { return t->*m_; }
+
+        const M &m_;
+    };
+
+    template<typename R, typename C, typename L> struct mem_bind_t
+    {
+    public:
+        typedef typename result_traits<R>::type result_type;
+        typedef R C:: *M;
+        typedef mem_object_t<result_type, M> O;
+
+        mem_bind_t(M m, const L &l) : m_(m), l_(l){}
+
+        template<typename A> inline result_type eval(A &a)
+        {
+            return l_(type<result_type>(), O(m_), a);
+        }
+
+        template<typename A> inline result_type eval(A &a) const
+        {
+            return l_(type<result_type>(), O(m_),  a);
+        }
+
+        inline result_type operator()()
+        {
+            typedef list0 ll;
+            typedef list_av<ll> ll_av;
+            typedef mem_list_av<ll_av> m_ll_av;
+            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll())));
+        }
+
+        inline result_type operator()() const
+        {
+            typedef list0 ll;
+            typedef list_av<ll> ll_av;
+            typedef mem_list_av<ll_av> m_ll_av;
+            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll())));
+        }
+
+        template<typename P> inline result_type operator()(P &p)
+        {
+            typedef mem_list<P&> ll;
+            typedef list_av<ll> ll_av;
+            typedef mem_list_av<ll_av> m_ll_av;
+            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+        }
+
+        template<typename P> inline result_type operator()(P &p) const
+        {
+            typedef mem_list<P&> ll;
+            typedef list_av<ll> ll_av;
+            typedef mem_list_av<ll_av> m_ll_av;
+            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+        }
+
+        template<typename P> inline result_type operator()(const P &p)
+        {
+            typedef mem_list<const P&> ll;
+            typedef list_av<ll> ll_av;
+            typedef mem_list_av<ll_av> m_ll_av;
+            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+        }
+
+        template<typename P> inline result_type operator()(const P &p) const
+        {
+            typedef mem_list<const P&> ll;
+            typedef list_av<ll> ll_av;
+            typedef mem_list_av<ll_av> m_ll_av;
+            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+        }
+
+    private:
+        M m_;
+        L l_;
+    };
+
+    template<typename R, typename C>
+    mem_bind_t<R, C, mem_list_av<list0> > bind(R C::*p)
+    {
+        typedef list0 L;
+        return mem_bind_t<R, C, mem_list_av<L> >(p, mem_list_av<L>(L()));
+    }
+
+    template<typename R, typename C, typename A>
+    mem_bind_t<R, C, mem_list_av<mem_list<A> > > bind(R C::*p, A a)
+    {
+        typedef mem_list<A> L;
+        return mem_bind_t<R, C, mem_list_av<L> >(p, mem_list_av<L>(L(a)));
+    }
 
 } // namespace bi
 
