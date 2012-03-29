@@ -27,11 +27,39 @@ namespace bi
         typedef typename untie_ref<T>::type &type;
     };
 
-    template<class R> struct result_traits
+    template<typename R> struct result_traits
     {
         typedef R type;
     };
-    template<class F> struct result_traits<type<F> > : result_traits<typename F::result_type> {};
+    template<typename F> struct result_traits<type<F> > : result_traits<typename F::result_type> {};
+
+    template<typename T> struct reference_wrapper
+    { 
+    public:
+        typedef T type;
+
+        explicit reference_wrapper(T &t): t_(&t) {}
+
+        operator T& () const { return *t_; }
+
+        T& get() const { return *t_; }
+        T* get_pointer() const { return t_; }
+
+    private:
+        T* t_;
+    };
+
+    template<typename T> 
+    inline reference_wrapper<T> ref(T &t)
+    { 
+        return reference_wrapper<T>(t); 
+    }
+
+    template<typename T> 
+    inline reference_wrapper<T const> cref(const T &t)
+    { 
+        return reference_wrapper<const T>(t);
+    }
 
     template<typename R, typename F> struct f_i
     {
@@ -244,35 +272,27 @@ namespace bi
         }
     };
 
-    template<typename lt>
-    struct list_av : lt
+    struct list_b
     {
-        typedef lt base;
-        list_av(const lt &ll) : base(ll) {}
-
-        using base::operator[];
-
         template<typename T>
         inline T& operator[](T &v) const {return v;}
 
         template<typename T>
-        inline const T& operator[](const T &v) const{ return v;}
+        inline const T& operator[](const T &v) const{return v;}
 
-        template<typename R, typename F, typename L>
-        inline R operator[](const bind_t<R, F, L> &b) const
-        {
-            return b.eval(*this);
-        }
+        template<typename T> 
+        inline T& operator[](reference_wrapper<T> &v) const {return v.get();}
 
-        template<typename R, typename F, typename L>
-        inline R operator[](bind_t<R, F, L> &b) const
-        {
-            return b.eval(*this);
-        }
+        template<typename T> 
+        inline T& operator[](const reference_wrapper<T> &v) const {return v.get();}
     };
 
-    struct list0
+    struct list0 : list_b
     {
+        typedef list_b base;
+
+        using base::operator[];
+
         inline void operator[](Argc<0>(*)()) const{};
         inline void operator[](Argc<0>) const{};
 
@@ -286,6 +306,12 @@ namespace bi
         inline R operator()(type<R>, F &f, const L&) const
         {
             return f();
+        }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            return b.eval(*this);
         }
     };
 
@@ -308,6 +334,13 @@ namespace bi
         {
             const D &d = static_cast<const D&>(*this); d;  //used C4189
             return f(l[d.a1_]);
+        }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
         }
     };
 
@@ -358,6 +391,13 @@ namespace bi
         {
             const D &d = static_cast<const D&>(*this); d; //used C4189
             return f(l[d.a1_], l[d.a2_]);
+        }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
         }
     };
 
@@ -411,6 +451,13 @@ namespace bi
             const D &d = static_cast<const D&>(*this); d;  //used C4189
             return f(l[d.a1_], l[d.a2_], l[d.a3_]);
         }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
+        }
     };
 
     template<typename A1, typename A2, typename A3>
@@ -460,6 +507,13 @@ namespace bi
         {
             const D &d = static_cast<const D&>(*this); d; //used C4189
             return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
+        }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
         }
     };
 
@@ -511,6 +565,13 @@ namespace bi
             const D &d = static_cast<const D&>(*this); d; //used C4189
             return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4], l[d.a5_]);
         }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
+        }
     };
 
     template<typename A1, typename A2, typename A3, typename A4, typename A5>
@@ -560,6 +621,13 @@ namespace bi
         {
             const D &d = static_cast<const D&>(*this); d; //used C4189
             return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
+        }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
         }
     };
 
@@ -611,6 +679,13 @@ namespace bi
             const D &d = static_cast<const D&>(*this); d; //used C4189
             return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
         }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
+        }
     };
 
     template<typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
@@ -660,6 +735,13 @@ namespace bi
         {
             const D &d = static_cast<const D&>(*this); d; //used C4189
             return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
+        }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
         }
     };
 
@@ -711,6 +793,13 @@ namespace bi
             const D &d = static_cast<const D&>(*this); d; //used C4189
             return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
         }
+
+        template<typename R, typename F, typename L>
+        inline R operator[](bind_t<R, F, L> &b) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
+        }
     };
 
     template<typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9>
@@ -753,7 +842,7 @@ namespace bi
     {
         typedef R (*F)(P1);
         typedef list1<A1> L;
-        return bind_t<R, F, list1<A1> >(f, L(a1));
+        return bind_t<R, F, L>(f, L(a1));
     }
 
     template<typename R, typename P1, typename P2, typename A1, typename A2>
@@ -1126,293 +1215,293 @@ namespace bi
         inline result_type operator()()
         {
             typedef list0 ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll()));
+            return l_(type<result_type>(), f_, ll());
         }
 
         inline result_type operator()() const
         {
             typedef list0 ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll()));
+            return l_(type<result_type>(), f_, ll());
         }
 
         template<typename P1>
         inline result_type operator()(P1 &p1)
         {
             typedef list1<P1&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1)));
+            return l_(type<result_type>(), f_, ll(p1));
         }
 
         template<typename P1>
         inline result_type operator()(P1 &p1) const
         {
             typedef list1<P1&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1)));
+            return l_(type<result_type>(), f_, ll(p1));
         }
 
         template<typename P1>
         inline result_type operator()(const P1 &p1)
         {
             typedef list1<const P1&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1)));
+            return l_(type<result_type>(), f_, ll(p1));
         }
 
         template<typename P1>
         inline result_type operator()(const P1 &p1) const
         {
             typedef list1<const P1&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1)));
+            return l_(type<result_type>(), f_, ll(p1));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(P1 &p1, P2 &p2)
         {
             typedef list2<P1&, P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(P1 &p1, P2 &p2) const
         {
             typedef list2<P1&, P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(const P1 &p1, P2 &p2)
         {
             typedef list2<const P1&, P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(const P1 &p1, P2 &p2) const
         {
             typedef list2<const P1&, P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(P1 &p1, const P2 &p2)
         {
             typedef list2<P1&, const P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(P1 &p1, const P2 &p2) const
         {
             typedef list2<P1&, const P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(const P1 &p1, const P2 &p2)
         {
             typedef list2<const P1&, const P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2>
         inline result_type operator()(const P1 &p1, const P2 &p2) const
         {
             typedef list2<const P1&, const P2&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2)));
+            return l_(type<result_type>(), f_, ll(p1, p2));
         }
 
         template<typename P1, typename P2, typename P3>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3)
         {
             typedef list3<P1&, P2&, P3&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3));
         }
 
         template<typename P1, typename P2, typename P3>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3) const
         {
             typedef list3<P1&, P2&, P3&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3));
         }
 
         template<typename P1, typename P2, typename P3>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3)
         {
             typedef list3<const P1&, const P2&, const P3&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3));
         }
 
         template<typename P1, typename P2, typename P3>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3) const
         {
             typedef list3<const P1&, const P2&, const P3&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3));
         }
 
         template<typename P1, typename P2, typename P3, typename P4>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4)
         {
             typedef list4<P1&, P2&, P3&, P4&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4));
         }
 
         template<typename P1, typename P2, typename P3, typename P4>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4) const
         {
             typedef list4<P1&, P2&, P3&, P4&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4));
         }
 
         template<typename P1, typename P2, typename P3, typename P4>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4)
         {
             typedef list4<const P1&, const P2&, const P3&, const P4&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4));
         }
 
         template<typename P1, typename P2, typename P3, typename P4>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4) const
         {
             typedef list4<const P1&, const P2&, const P3&, const P4&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5)
         {
             typedef list5<P1&, P2&, P3&, P4&, P5&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5) const
         {
             typedef list5<P1&, P2&, P3&, P4&, P5&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5)
         {
             typedef list5<const P1&, const P2&, const P3&, const P4&, const P5&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5) const
         {
             typedef list5<const P1&, const P2&, const P3&, const P4&, const P5&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6)
         {
             typedef list6<P1&, P2&, P3&, P4&, P5&, P6&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6) const
         {
             typedef list6<P1&, P2&, P3&, P4&, P5&, P6&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6)
         {
             typedef list6<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(list_av<ll>(ll(p1, p2, p3, p4, p5, p6))));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6) const
         {
             typedef list6<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6, P7 &p7)
         {
             typedef list7<P1&, P2&, P3&, P4&, P5&, P6&, P7&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6, P7 &p7) const
         {
             typedef list7<P1&, P2&, P3&, P4&, P5&, P6&, P7&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6, const P7 &p7)
         {
             typedef list7<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&, const P7&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6, const P7 &p7) const
         {
             typedef list7<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&, const P7&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6, P7 &p7, P8 &p8)
         {
             typedef list8<P1&, P2&, P3&, P4&, P5&, P6&, P7&, P8&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7, p8));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6, P7 &p7, P8 &p8) const
         {
             typedef list8<P1&, P2&, P3&, P4&, P5&, P6&, P7&, P8&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7, p8));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6, const P7 &p7, const P8 &p8)
         {
             typedef list8<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&, const P7&, const P8&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7, p8));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6, const P7 &p7, const P8 &p8) const
         {
             typedef list8<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&, const P7&, const P8&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7, p8));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6, P7 &p7, P8 &p8, P9 &p9)
         {
             typedef list9<P1&, P2&, P3&, P4&, P5&, P6&, P7&, P8&, P9&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8, p9)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7, p8, p9));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
         inline result_type operator()(P1 &p1, P2 &p2, P3 &p3, P4 &p4, P5 &p5, P6 &p6, P7 &p7, P8 &p8, P9 &p9) const
         {
             typedef list9<P1&, P2&, P3&, P4&, P5&, P6&, P7&, P8&, P9&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8, p9)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7, p8, p9));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6, const P7 &p7, const P8 &p8, const P9 &p9)
         {
             typedef list9<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&, const P7&, const P8&, const P9&> ll;
-            return l_(type<result_type>(), f_, list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8, p9)));
+            return l_(type<result_type>(), f_, ll(p1, p2, p3, p4, p5, p6, p7, p8, p9));
         }
 
         template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
         inline result_type operator()(const P1 &p1, const P2 &p2, const P3 &p3, const P4 &p4, const P5 &p5, const P6 &p6, const P7 &p7, const P8 &p8, const P9 &p9) const
         {
             typedef list9<const P1&, const P2&, const P3&, const P4&, const P5&, const P6&, const P7&, const P8&, const P9&> ll;
-            return l_(type<result_type>(), f_,  list_av<ll>(ll(p1, p2, p3, p4, p5, p6, p7, p8, p9)));
+            return l_(type<result_type>(), f_,  ll(p1, p2, p3, p4, p5, p6, p7, p8, p9));
         }
 
     private:
@@ -1420,35 +1509,73 @@ namespace bi
         L l_;
     };
 
-    template<typename D>
-    struct mem_list_b : list0
+    template<typename D> struct mem_list_b : list_b
     {
-        typedef list0 base;
+        typedef list_b base;
+        using base::operator[];
 
-        template<typename R, typename O, typename L>
-        inline R operator()(type<R>, const O &o, const L &l)
-        {
-            D &d = static_cast<D&>(*this); d;  //used C4189
-            return o(l[d.a_]);
+        template<typename R, typename C, typename L>
+        inline typename param_traits<R>::type operator[](mem_bind_t<R, C, L> &b) const 
+        { 
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return b.eval(d);
         }
 
-        template<typename R, typename O, typename L>
-        inline R operator()(type<R>, const O &o, const L &l) const
+        template<typename R, typename F, typename L>
+        inline typename param_traits<R>::type operator[](bind_t<R, F, L> &b) const
         {
             const D &d = static_cast<const D&>(*this); d;  //used C4189
-            return o(l[d.a_]);
+            return b.eval(d);
+        }
+
+        template<typename R, typename M, typename L>
+        inline R operator()(type<R>, const M &m, L &l)
+        {
+            D &d = static_cast<D&>(*this); d;  //used C4189
+            return m(l[d.a_]);
+        }
+
+        template<typename R, typename M, typename L>
+        inline R operator()(type<R>, const M &m, L &l) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return m(l[d.a_]);
+        }
+
+        template<typename R, typename M, typename L>
+        inline R operator()(type<R>, const M &m, const L &l)
+        {
+            D &d = static_cast<D&>(*this); d;  //used C4189
+            return m(l[d.a_]);
+        }
+
+        template<typename R, typename M, typename L>
+        inline R operator()(type<R>, const M &m, const L &l) const
+        {
+            const D &d = static_cast<const D&>(*this); d;  //used C4189
+            return m(l[d.a_]);
         }
     };
 
-    template<typename A>
-    struct mem_list : mem_list_b<mem_list<A> >
+    struct mem_list_0 : mem_list_b<mem_list_0>
     {
-        typedef mem_list_b<mem_list<A> > base;
+        typedef mem_list_b<mem_list_0> base;
+
+        using base::operator[];
+
+        inline void operator[](Argc<0>(*)()) const {}
+        inline void operator[](Argc<0>) const {}
+    };
+
+    template<typename A>
+    struct mem_list_1 : mem_list_b<mem_list_1<A> >
+    {
+        typedef mem_list_b<mem_list_1<A> > base;
         typedef typename param_traits<A>::type P;
 
         using base::operator[];
 
-        explicit mem_list(P p) : a_(p) {}
+        explicit mem_list_1(P p) : a_(p) {}
         inline P operator[](Argc<1>(*)()) const { return a_;}
         inline P operator[](Argc<1>) const { return a_;}
 
@@ -1456,64 +1583,42 @@ namespace bi
     };
 
     template<int I>
-    struct mem_list<Argc<I>(*)()> : mem_list_b<mem_list<Argc<I>(*)()> >
+    struct mem_list_1<Argc<I>(*)()> : mem_list_b<mem_list_1<Argc<I>(*)()> >
     {
-        typedef mem_list_b<mem_list<Argc<I>(*)()> > base;
+        typedef mem_list_b<mem_list_1<Argc<I>(*)()> > base;
         typedef typename param_traits<Argc<I>(*)()>::type P;
 
         using base::operator[];
 
-        explicit mem_list(P){}
+        explicit mem_list_1(P){}
         static Argc<I> a_() {return Argc<I>();}
-    };
-
-    template<typename lt>
-    struct mem_list_av : lt
-    {
-        typedef lt base;
-        mem_list_av(const lt &ll) : base(ll) {}
-
-        using base::operator[];
-
-        template<typename R, typename C, typename L>
-        inline R operator[](const mem_bind_t<R, C, L> &b) const 
-        { 
-            return b.eval(*this);
-        }
-
-        template<typename R, typename C, typename L>
-        inline R operator[](mem_bind_t<R, C, L> &b) const 
-        { 
-            return b.eval(*this);
-        }
     };
 
     template<typename R, typename M> struct mem_object_t
     {
-        typedef typename result_traits<R>::type result_type;
+        typedef typename param_traits<R>::type result_type;
 
-        mem_object_t(const M &m) : m_(m){}
+        explicit mem_object_t(const M &m) : m_(m){}
 
         template<typename T> 
         inline result_type operator()(T &t) const { return t.*m_; }
 
         template<typename T> 
-        inline const result_type operator()(const T &t) const { return t.*m_; }
+        inline result_type operator()(const T &t) const { return t.*m_; }
 
         template<typename T> 
         inline result_type operator()(T *t) const { return t->*m_; }
 
         template<typename T> 
-        inline const result_type operator()(const T *t) const { return t->*m_; }
+        inline result_type operator()(const T *t) const { return t->*m_; }
 
         const M &m_;
     };
 
-    template<typename R, typename C, typename L> struct mem_bind_t
+    template<typename R, typename M, typename L> struct mem_bind_t
     {
     public:
-        typedef typename result_traits<R>::type result_type;
-        typedef R C:: *M;
+        typedef typename param_traits<R>::type result_type;
         typedef mem_object_t<result_type, M> O;
 
         mem_bind_t(M m, const L &l) : m_(m), l_(l){}
@@ -1530,50 +1635,38 @@ namespace bi
 
         inline result_type operator()()
         {
-            typedef list0 ll;
-            typedef list_av<ll> ll_av;
-            typedef mem_list_av<ll_av> m_ll_av;
-            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll())));
+            typedef mem_list_0 ll;
+            return l_(type<result_type>(), O(m_), ll());
         }
 
         inline result_type operator()() const
         {
-            typedef list0 ll;
-            typedef list_av<ll> ll_av;
-            typedef mem_list_av<ll_av> m_ll_av;
-            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll())));
+            typedef mem_list_0 ll;
+            return l_(type<result_type>(), O(m_), ll());
         }
 
         template<typename P> inline result_type operator()(P &p)
         {
-            typedef mem_list<P&> ll;
-            typedef list_av<ll> ll_av;
-            typedef mem_list_av<ll_av> m_ll_av;
-            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+            typedef mem_list_1<P&> ll;
+            return l_(type<result_type>(), O(m_), ll(p));
         }
 
         template<typename P> inline result_type operator()(P &p) const
         {
-            typedef mem_list<P&> ll;
-            typedef list_av<ll> ll_av;
-            typedef mem_list_av<ll_av> m_ll_av;
-            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+            typedef mem_list_1<P&> ll;
+            return l_(type<result_type>(), O(m_), ll(p));
         }
 
         template<typename P> inline result_type operator()(const P &p)
         {
-            typedef mem_list<const P&> ll;
-            typedef list_av<ll> ll_av;
-            typedef mem_list_av<ll_av> m_ll_av;
-            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+            typedef mem_list_1<const P&> ll;
+            return l_(type<result_type>(), O(m_), ll(p));
         }
 
         template<typename P> inline result_type operator()(const P &p) const
         {
-            typedef mem_list<const P&> ll;
-            typedef list_av<ll> ll_av;
-            typedef mem_list_av<ll_av> m_ll_av;
-            return l_(type<result_type>(), O(m_), m_ll_av(ll_av(ll(p))));
+            typedef mem_list_1<const P&> ll;
+            return l_(type<result_type>(), O(m_), ll(p));
         }
 
     private:
@@ -1581,20 +1674,19 @@ namespace bi
         L l_;
     };
 
-    template<typename R, typename C>
-    mem_bind_t<R, C, mem_list_av<list0> > bind(R C::*p)
+    template<typename R, typename C> 
+    mem_bind_t<R, R C::*, mem_list_0> bind(R C::*p)
     {
-        typedef list0 L;
-        return mem_bind_t<R, C, mem_list_av<L> >(p, mem_list_av<L>(L()));
+        typedef mem_list_0 L;
+        return mem_bind_t<R, R C::*, L>(p, L());
     }
 
     template<typename R, typename C, typename A>
-    mem_bind_t<R, C, mem_list_av<mem_list<A> > > bind(R C::*p, A a)
+    mem_bind_t<R, R C::*, mem_list_1<A> > bind(R C::*p, A a)
     {
-        typedef mem_list<A> L;
-        return mem_bind_t<R, C, mem_list_av<L> >(p, mem_list_av<L>(L(a)));
+        typedef mem_list_1<A> L;
+        return mem_bind_t<R, R C::*, L>(p, L(a));
     }
-
 } // namespace bi
 
 namespace
