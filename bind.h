@@ -62,6 +62,9 @@ namespace bi
 
   template<typename T>
   inline T* get_pointer(T *o){return o;}
+
+  template<typename T>
+  inline T* get_pointer(T &o){return &o;}
 }
 
 namespace
