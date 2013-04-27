@@ -1,6 +1,8 @@
 #ifndef BIND_H_INCLUDED
 #define BIND_H_INCLUDED
 
+#include <stdexcept>
+
 #if defined(_MSC_VER)
 # if (_MSC_VER >= 1020)
 #  pragma once
@@ -1564,6 +1566,11 @@ namespace bi
     R invoke(LP &p) { return b_.eval(p); }
   };
 
+  struct bad_function_call : std::runtime_error
+  {
+    bad_function_call() : std::runtime_error("call to empty function") {}
+  };
+
   struct callback_base
   {
     callback_base() { b_ = NULL; }
@@ -1596,7 +1603,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()() const { return (b_->*((Fn)b_->invoke))(); }
+    R operator()() const { return b_ ? throw bad_function_call() : (b_->*((Fn)b_->invoke))(); }
   };
 
   template<typename R, typename P1>
@@ -1615,7 +1622,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1) const { return (b_->*((Fn)b_->invoke))(LP(p1)); }
+    R operator()(P1 p1) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2>
@@ -1634,7 +1641,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2)); }
+    R operator()(P1 p1, P2 p2) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3>
@@ -1653,7 +1660,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2, P3 p3) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3)); }
+    R operator()(P1 p1, P2 p2, P3 p3) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4>
@@ -1672,7 +1679,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4)); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
@@ -1691,7 +1698,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5)); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
@@ -1710,7 +1717,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6)); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const { return b_ ?  (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
@@ -1729,7 +1736,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7)); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
@@ -1748,7 +1755,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8)); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
@@ -1767,7 +1774,7 @@ namespace bi
       delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
     }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const { return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8, p9)); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const { b_ ? return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8, p9)) : throw bad_function_call(); }
   };
 } // namespace bi
 
