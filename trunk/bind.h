@@ -1571,208 +1571,158 @@ namespace bi
     bad_function_call() : std::runtime_error("call to empty function") {}
   };
 
-  struct callback_base
+  template<typename R, typename L> struct callback_base
   {
-    callback_base() { b_ = NULL; }
-    ~callback_base() {delete b_;}
+    typedef L LP;
+    typedef R (bundling::*Fn)(LP&) const;
 
-    callback_base(const callback_base &other) { b_ = other.b_ ? other.b_->clone() : NULL; }
+    callback_base() { b_ = 0; }
+    ~callback_base() { delete b_;}
 
-    const callback_base& operator=(const callback_base &other)
-    {
-      delete b_; b_ = other.b_ ? other.b_->clone() : NULL; return *this;
-    }
+    callback_base(const callback_base &other) { b_ = other.b_ ? other.b_->clone() : other.b_; }
+    callback_base& operator=(const callback_base &other) { delete b_; b_ = other.b_ ? other.b_->clone() : other.b_; return *this; }
+
     const bundling *b_;
   };
 
   template<typename S> struct callback{};
 
   template<typename R>
-  struct callback<R()> : callback_base
+  struct callback<R()> : callback_base<R, list0>
   {
-    typedef list0 LP;
-    typedef R (bundling::*Fn)() const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
-    R operator()() const { return b_ ? throw bad_function_call() : (b_->*((Fn)b_->invoke))(); }
+    R operator()() const { return b_ ? (b_->*((Fn)b_->invoke))((LP())) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1>
-  struct callback<R(P1)> : callback_base
+  struct callback<R(P1)> : callback_base<R, list1<P1> >
   {
-    typedef list1<P1> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2>
-  struct callback<R(P1, P2)> : callback_base
+  struct callback<R(P1, P2)> : callback_base<R, list2<P1, P2> >
   {
-    typedef list2<P1, P2> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3>
-  struct callback<R(P1, P2, P3)> : callback_base
+  struct callback<R(P1, P2, P3)> : callback_base<R, list3<P1, P2, P3> >
   {
-    typedef list3<P1, P2, P3> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4>
-  struct callback<R(P1, P2, P3, P4)> : callback_base
+  struct callback<R(P1, P2, P3, P4)> : callback_base<R, list4<P1, P2, P3, P4> >
   {
-    typedef list4<P1, P2, P3, P4> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
-  struct callback<R(P1, P2, P3, P4, P5)> : callback_base
+  struct callback<R(P1, P2, P3, P4, P5)> : callback_base<R, list5<P1, P2, P3, P4, P5> >
   {
-    typedef list5<P1, P2, P3, P4, P5> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-  struct callback<R(P1, P2, P3, P4, P5, P6)> : callback_base
+  struct callback<R(P1, P2, P3, P4, P5, P6)> : callback_base<R, list6<P1, P2, P3, P4, P5, P6> >
   {
-    typedef list6<P1, P2, P3, P4, P5, P6> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const { return b_ ?  (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-  struct callback<R(P1, P2, P3, P4, P5, P6, P7)> : callback_base
+  struct callback<R(P1, P2, P3, P4, P5, P6, P7)> : callback_base<R, list7<P1, P2, P3, P4, P5, P6, P7> >
   {
-    typedef list7<P1, P2, P3, P4, P5, P6, P7> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8)> : callback_base
+  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8)> : callback_base<R, list8<P1, P2, P3, P4, P5, P6, P7, P8> >
   {
-    typedef list8<P1, P2, P3, P4, P5, P6, P7, P8> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
-  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8, P9)> : callback_base
+  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8, P9)> : callback_base<R, list9<P1, P2, P3, P4, P5, P6, P7, P8, P9> >
   {
-    typedef list9<P1, P2, P3, P4, P5, P6, P7, P8, P9> LP;
-    typedef R (bundling::*Fn)(LP&) const;
+    callback() {}
 
-    callback(){}
     template<typename R, typename F, typename L> 
     callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
 
     template<typename R, typename F, typename L> 
-    const callback& operator=(const bind_t<R, F, L> &b)
-    {
-      delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this;
-    }
+    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const { b_ ? return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8, p9)) : throw bad_function_call(); }
   };
