@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #if defined(_MSC_VER)
+// MS compatible compilers support #pragma once
 # if (_MSC_VER >= 1020)
 #  pragma once
 # endif
@@ -14,7 +15,7 @@
 namespace bi
 {
   template<int I> struct Argc{};
-  template<typename T> struct type{};
+  template<typename T> struct type{ typedef T value; };
   template<typename R, typename F, typename L> struct bind_t;
 
   template<typename T> struct untie_ref
@@ -49,6 +50,7 @@ namespace bi
   private:
     T* t_;
   };
+  template<typename F> struct result_traits<type<reference_wrapper<F> > > : result_traits<typename F::result_type> {};
 
   template<typename T> 
   inline reference_wrapper<T> ref(T &t)
@@ -184,7 +186,7 @@ namespace bi
     {
       return (get_pointer(u)->*base::f_)(a1, a2, a3, a4);
     }
-
+    
     template<typename A1, typename A2, typename A3, typename A4>
     inline typename base::result_type operator()(C &c, A1 &a1, A2 &a2, A3 &a3, A4 &a4) const
     {
@@ -319,13 +321,15 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L&)
     {
-      return f();
+      D &d = static_cast<D&>(*this); d;  //used C4189
+      return d[f]();
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L&) const
     {
-      return f();
+      D &d = static_cast<D&>(*this); d;  //used C4189
+      return d[f]();
     }
 
     template<typename R, typename F, typename L>
@@ -346,14 +350,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d;  //used C4189
-      return f(l[d.a1_]);
+      return d[f](l[d.a1_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return f(l[d.a1_]);
+      return d[f](l[d.a1_]);
     }
 
     template<typename R, typename F, typename L>
@@ -404,14 +408,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_]);
+      return d[f](l[d.a1_], l[d.a2_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_]);
+      return d[f](l[d.a1_], l[d.a2_]);
     }
 
     template<typename R, typename F, typename L>
@@ -463,14 +467,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d;  //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_]);
     }
 
     template<typename R, typename F, typename L>
@@ -521,14 +525,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
     }
 
     template<typename R, typename F, typename L>
@@ -580,14 +584,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4], l[d.a5_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4], l[d.a5_]);
     }
 
     template<typename R, typename F, typename L>
@@ -639,14 +643,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
     }
 
     template<typename R, typename F, typename L>
@@ -698,14 +702,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
     }
 
     template<typename R, typename F, typename L>
@@ -757,14 +761,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
     }
 
     template<typename R, typename F, typename L>
@@ -816,14 +820,14 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); d; //used C4189
-      return f(l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
+      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
     }
 
     template<typename R, typename F, typename L>
@@ -1555,15 +1559,14 @@ namespace bi
     virtual bundling* clone() const = 0;
   };
 
-  template<typename R, typename F, typename L, typename LP>
+  template<typename B, typename LP>
   struct bind_bundling : bundling
   {
-    typedef bind_t<R, F, L> B;
     const B b_;
 
     explicit bind_bundling(const B &b) : b_(b) {bundling::invoke = (BFn)&bind_bundling::invoke;}
     virtual bundling* clone() const { return new bind_bundling(*this); }
-    R invoke(LP &p) { return b_.eval(p); }
+    typename B::result_type invoke(LP &p) { return b_.eval(p); }
   };
 
   struct bad_function_call : std::runtime_error
@@ -1579,7 +1582,7 @@ namespace bi
     callback_base() { b_ = 0; }
     ~callback_base() { delete b_;}
 
-    callback_base(const callback_base &other) { b_ = other.b_ ? other.b_->clone() : other.b_; }
+    callback_base(const callback_base &other) { if (other.b_) b_ = other.b_->clone(); }
     callback_base& operator=(const callback_base &other) { delete b_; b_ = other.b_ ? other.b_->clone() : other.b_; return *this; }
 
     const bundling *b_;
@@ -1592,11 +1595,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()() const { return b_ ? (b_->*((Fn)b_->invoke))((LP())) : throw bad_function_call(); }
   };
@@ -1606,11 +1609,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1)) : throw bad_function_call(); }
   };
@@ -1620,11 +1623,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2)) : throw bad_function_call(); }
   };
@@ -1634,11 +1637,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3)) : throw bad_function_call(); }
   };
@@ -1648,11 +1651,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4)) : throw bad_function_call(); }
   };
@@ -1662,11 +1665,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5)) : throw bad_function_call(); }
   };
@@ -1676,11 +1679,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const { return b_ ?  (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6)) : throw bad_function_call(); }
   };
@@ -1690,11 +1693,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7)) : throw bad_function_call(); }
   };
@@ -1704,11 +1707,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8)) : throw bad_function_call(); }
   };
@@ -1718,11 +1721,11 @@ namespace bi
   {
     callback() {}
 
-    template<typename R, typename F, typename L> 
-    callback(const bind_t<R, F, L> &b) { b_ = new bind_bundling<R, F, L, LP>(b); }
+    template<typename B> 
+    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
 
-    template<typename R, typename F, typename L> 
-    callback& operator=(const bind_t<R, F, L> &b) { delete b_; b_ = new bind_bundling<R, F, L, LP>(b); return *this; }
+    template<typename B> 
+    callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
     R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const { b_ ? return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8, p9)) : throw bad_function_call(); }
   };
@@ -1732,5 +1735,4 @@ namespace bi
 # pragma warning(default: 4512) // assignment operator could not be generated
 # pragma warning(pop)
 #endif
-
 #endif // bind_h__
