@@ -1,16 +1,27 @@
-#ifndef BIND_H_INCLUDED
-#define BIND_H_INCLUDED
+#ifndef __BIND_H_INCLUDED__
+#define __BIND_H_INCLUDED__
 
 #include <stdexcept>
 
-#if defined(_MSC_VER)
+# if defined(_MSC_VER)
 // MS compatible compilers support #pragma once
-# if (_MSC_VER >= 1020)
-#  pragma once
+#  if (_MSC_VER >= 1020)
+#   pragma once
+#  endif
+#  pragma warning(push)
+#  pragma warning(disable: 4512) // assignment operator could not be generated
 # endif
-# pragma warning(push)
-# pragma warning(disable: 4512) // assignment operator could not be generated
-#endif
+
+# pragma pack(push,_CRT_PACKING)
+# pragma warning(push,3)
+# pragma push_macro("new")
+# undef new
+
+namespace std
+{
+  template<class T> class shared_ptr;
+  template<class T, class D> class unique_ptr;
+}
 
 namespace bi
 {
@@ -69,6 +80,12 @@ namespace bi
 
   template<typename T>
   inline T* get_pointer(T &o){return &o;}
+
+  template<typename T>
+  inline T* get_pointer(const std::shared_ptr<T> &o){return o.get();}
+
+  template<typename T, typename D>
+  inline T* get_pointer(const std::unique_ptr<T, D> &o){return o.get();}
 }
 
 namespace
@@ -1564,7 +1581,7 @@ namespace bi
   {
     const B b_;
 
-    explicit bind_bundling(const B &b) : b_(b) {bundling::invoke = (BFn)&bind_bundling::invoke;}
+    explicit bind_bundling(const B &b) : b_(b) {bundling::invoke = reinterpret_cast<BFn>(&bind_bundling::invoke);}
     virtual bundling* clone() const { return new bind_bundling(*this); }
     typename B::result_type invoke(LP &p) { return b_.eval(p); }
   };
@@ -1601,7 +1618,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()() const { return b_ ? (b_->*((Fn)b_->invoke))((LP())) : throw bad_function_call(); }
+    R operator()() const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))((LP())) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1>
@@ -1615,7 +1632,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1)) : throw bad_function_call(); }
+    R operator()(P1 p1) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2>
@@ -1629,7 +1646,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3>
@@ -1643,7 +1660,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4>
@@ -1657,7 +1674,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
@@ -1671,7 +1688,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
@@ -1685,7 +1702,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const { return b_ ?  (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const { return b_ ?  (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
@@ -1699,7 +1716,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6, p7)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
@@ -1713,7 +1730,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const { return b_ ? (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6, p7, p8)) : throw bad_function_call(); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
@@ -1727,12 +1744,16 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const { b_ ? return (b_->*((Fn)b_->invoke))(LP(p1, p2, p3, p4, p5, p6, p7, p8, p9)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const { b_ ? return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6, p7, p8, p9)) : throw bad_function_call(); }
   };
 } // namespace bi
 
-#ifdef _MSC_VER
-# pragma warning(default: 4512) // assignment operator could not be generated
+# pragma pop_macro("new")
 # pragma warning(pop)
-#endif
+# pragma pack(pop)
+
+# ifdef _MSC_VER
+#  pragma warning(default: 4512) // assignment operator could not be generated
+#  pragma warning(pop)
+# endif
 #endif // bind_h__
