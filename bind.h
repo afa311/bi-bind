@@ -107,6 +107,12 @@ namespace bi
   {
     typedef typename result_traits<R>::type result_type;
 
+    template<typename R, typename F>
+    bool operator==(const f_i<R, F> &o) const
+    {
+      return get_pointer(o.f_) == get_pointer(f_);
+    }
+
   protected:
     explicit f_i(const F &f) : f_(f) {}
     F f_;
@@ -1571,7 +1577,7 @@ namespace bi
   struct bundling
   {
     typedef void (bundling::*BFn)(...) const;
-    BFn invoke;
+    mutable BFn invoke;
     virtual ~bundling(){}
     virtual bundling* clone() const = 0;
   };
@@ -1591,24 +1597,36 @@ namespace bi
     bad_function_call() : std::runtime_error("call to empty function") {}
   };
 
-  template<typename R, typename L> struct callback_base
+  struct callback_base
   {
-    typedef L LP;
-    typedef R (bundling::*Fn)(LP&) const;
-
     callback_base() { b_ = 0; }
     ~callback_base() { delete b_;}
 
     callback_base(const callback_base &other) { if (other.b_) b_ = other.b_->clone(); }
     callback_base& operator=(const callback_base &other) { delete b_; b_ = other.b_ ? other.b_->clone() : other.b_; return *this; }
 
+    void clear() { b_ = 0; }
+    bool empty() const { return !b_; }
+    void swap(callback_base &other) {const bundling *t = b_; b_ = other.b_; other.b_ = t; }
+
     const bundling *b_;
+  };
+  inline bool operator==(const callback_base &r, const callback_base &l) 
+  { 
+    return !(r.b_ && l.b_) ? r.b_ == l.b_ : r.b_->invoke == l.b_->invoke;
+  }
+
+  template<typename R, typename L> 
+  struct callback_sign : callback_base
+  {
+    typedef L LP;
+    typedef R (bundling::*Fn)(LP&) const;
   };
 
   template<typename S> struct callback{};
 
   template<typename R>
-  struct callback<R()> : callback_base<R, list0>
+  struct callback<R()> : callback_sign<R, list0>
   {
     callback() {}
 
@@ -1622,7 +1640,7 @@ namespace bi
   };
 
   template<typename R, typename P1>
-  struct callback<R(P1)> : callback_base<R, list1<P1> >
+  struct callback<R(P1)> : callback_sign<R, list1<P1> >
   {
     callback() {}
 
@@ -1636,7 +1654,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2>
-  struct callback<R(P1, P2)> : callback_base<R, list2<P1, P2> >
+  struct callback<R(P1, P2)> : callback_sign<R, list2<P1, P2> >
   {
     callback() {}
 
@@ -1650,7 +1668,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2, typename P3>
-  struct callback<R(P1, P2, P3)> : callback_base<R, list3<P1, P2, P3> >
+  struct callback<R(P1, P2, P3)> : callback_sign<R, list3<P1, P2, P3> >
   {
     callback() {}
 
@@ -1664,7 +1682,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4>
-  struct callback<R(P1, P2, P3, P4)> : callback_base<R, list4<P1, P2, P3, P4> >
+  struct callback<R(P1, P2, P3, P4)> : callback_sign<R, list4<P1, P2, P3, P4> >
   {
     callback() {}
 
@@ -1678,7 +1696,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
-  struct callback<R(P1, P2, P3, P4, P5)> : callback_base<R, list5<P1, P2, P3, P4, P5> >
+  struct callback<R(P1, P2, P3, P4, P5)> : callback_sign<R, list5<P1, P2, P3, P4, P5> >
   {
     callback() {}
 
@@ -1692,7 +1710,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-  struct callback<R(P1, P2, P3, P4, P5, P6)> : callback_base<R, list6<P1, P2, P3, P4, P5, P6> >
+  struct callback<R(P1, P2, P3, P4, P5, P6)> : callback_sign<R, list6<P1, P2, P3, P4, P5, P6> >
   {
     callback() {}
 
@@ -1706,7 +1724,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-  struct callback<R(P1, P2, P3, P4, P5, P6, P7)> : callback_base<R, list7<P1, P2, P3, P4, P5, P6, P7> >
+  struct callback<R(P1, P2, P3, P4, P5, P6, P7)> : callback_sign<R, list7<P1, P2, P3, P4, P5, P6, P7> >
   {
     callback() {}
 
@@ -1720,7 +1738,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8)> : callback_base<R, list8<P1, P2, P3, P4, P5, P6, P7, P8> >
+  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8)> : callback_sign<R, list8<P1, P2, P3, P4, P5, P6, P7, P8> >
   {
     callback() {}
 
@@ -1734,7 +1752,7 @@ namespace bi
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
-  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8, P9)> : callback_base<R, list9<P1, P2, P3, P4, P5, P6, P7, P8, P9> >
+  struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8, P9)> : callback_sign<R, list9<P1, P2, P3, P4, P5, P6, P7, P8, P9> >
   {
     callback() {}
 
