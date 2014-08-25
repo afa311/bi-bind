@@ -372,22 +372,22 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d;  //used C4189
-      return d[f](l[d.a1_]);
+      D &d = static_cast<D&>(*this); D &dt = d;  //used C4189
+      return dt[f](l[dt.a1_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return d[f](l[d.a1_]);
+      const D &d = static_cast<const D&>(*this); const D &dt=d;  //used C4189
+      return dt[f](l[dt.a1_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return b.eval(d);
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
+      return b.eval(dt);
     }
   };
 
@@ -430,22 +430,22 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d; //used C4189
+      D &d = static_cast<D&>(*this); D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_]);
+      const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
+      return dt[f](l[dt.a1_], l[dt.a2_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return b.eval(d);
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
+      return b.eval(dt);
     }
   };
 
@@ -489,22 +489,22 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d;  //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_]);
+      D &d = static_cast<D&>(*this); D &dt = d;  //used C4189
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_]);
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return b.eval(d);
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
+      return b.eval(dt);
     }
   };
 
@@ -547,22 +547,22 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
+      D &d = static_cast<D&>(*this); d; D &dt = d;//used C4189
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_]);
+      const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return b.eval(d);
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
+      return b.eval(dt);
     }
   };
 
@@ -606,22 +606,22 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_]);
+      D &d = static_cast<D&>(*this); D &dt = d; //used C4189
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4], l[d.a5_]);
+      const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4], l[dt.a5_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
-      return b.eval(d);
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
+      return b.eval(dt);
     }
   };
 
@@ -665,21 +665,21 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
+      D &d = static_cast<D&>(*this); D &dt = d; //used C4189
+      return dt[f](l[dt.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d; //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
       return b.eval(d);
     }
   };
@@ -724,21 +724,21 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d; //used C4189
+      D &d = static_cast<D&>(*this); D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d; //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
       return b.eval(d);
     }
   };
@@ -783,21 +783,21 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d; //used C4189
+      D &d = static_cast<D&>(*this); D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d; //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
       return b.eval(d);
     }
   };
@@ -842,21 +842,21 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l)
     {
-      D &d = static_cast<D&>(*this); d; //used C4189
+      D &d = static_cast<D&>(*this); D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
-      const D &d = static_cast<const D&>(*this); d; //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
       return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
-      const D &d = static_cast<const D&>(*this); d;  //used C4189
+      const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
       return b.eval(d);
     }
   };
