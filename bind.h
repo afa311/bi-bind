@@ -107,8 +107,8 @@ namespace bi
   {
     typedef typename result_traits<R>::type result_type;
 
-    template<typename R, typename F>
-    bool operator==(const f_i<R, F> &o) const
+    template<typename Ri, typename Fi>
+    bool operator==(const f_i<Ri, Fi> &o) const
     {
       return get_pointer(o.f_) == get_pointer(f_);
     }
@@ -344,14 +344,14 @@ namespace bi
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L&)
     {
-      D &d = static_cast<D&>(*this); d;  //used C4189
+      list0 &d = static_cast<list0&>(*this);  //used C4189
       return d[f]();
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L&) const
     {
-      D &d = static_cast<D&>(*this); d;  //used C4189
+      const list0 &d = static_cast<const list0&>(*this);  //used C4189
       return d[f]();
     }
 
@@ -1628,20 +1628,32 @@ namespace bi
   template<typename R>
   struct callback<R()> : callback_sign<R, list0>
   {
+    typedef callback_sign<R, list0> base;
+
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
-    callback(const B &b) { b_ = new bind_bundling<B, LP>(b); }
+    callback(const B &b) { base::b_ = new bind_bundling<B, typename base::LP>(b); }
 
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()() const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))((LP())) : throw bad_function_call(); }
+    R operator()() const {if (!b_)throw bad_function_call();  LP lp; return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1>
   struct callback<R(P1)> : callback_sign<R, list1<P1> >
   {
+    typedef callback_sign<R, list1<P1> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1650,12 +1662,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1)) : throw bad_function_call(); }
+    R operator()(P1 p1) const { if (!b_) throw bad_function_call(); LP lp(p1);return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1, typename P2>
   struct callback<R(P1, P2)> : callback_sign<R, list2<P1, P2> >
   {
+    typedef callback_sign<R, list2<P1, P2> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1664,12 +1682,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2) const { if (!b_)throw bad_function_call(); LP lp(p1, p2);return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1, typename P2, typename P3>
   struct callback<R(P1, P2, P3)> : callback_sign<R, list3<P1, P2, P3> >
   {
+    typedef callback_sign<R, list3<P1, P2, P3> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1678,12 +1702,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3) const {if (!b_)throw bad_function_call();  LP lp(p1, p2, p3);return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp); }
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4>
   struct callback<R(P1, P2, P3, P4)> : callback_sign<R, list4<P1, P2, P3, P4> >
   {
+    typedef callback_sign<R, list4<P1, P2, P3, P4> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1692,12 +1722,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4) const {if (!b_)throw bad_function_call();  LP lp(p1, p2, p3, p4); return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
   struct callback<R(P1, P2, P3, P4, P5)> : callback_sign<R, list5<P1, P2, P3, P4, P5> >
   {
+    typedef callback_sign<R, list5<P1, P2, P3, P4, P5> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1706,12 +1742,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5) const { if (!b_) throw bad_function_call(); LP lp(p1, p2, p3, p4, p5); return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
   struct callback<R(P1, P2, P3, P4, P5, P6)> : callback_sign<R, list6<P1, P2, P3, P4, P5, P6> >
   {
+    typedef callback_sign<R, list6<P1, P2, P3, P4, P5, P6> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1720,12 +1762,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const { return b_ ?  (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6) const {if (!b_)throw bad_function_call();  LP lp(p1, p2, p3, p4, p5, p6); return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
   struct callback<R(P1, P2, P3, P4, P5, P6, P7)> : callback_sign<R, list7<P1, P2, P3, P4, P5, P6, P7> >
   {
+    typedef callback_sign<R, list7<P1, P2, P3, P4, P5, P6, P7> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1734,12 +1782,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6, p7)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7) const {if (!b_)throw bad_function_call();  LP lp(p1, p2, p3, p4, p5, p6, p7); return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
   struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8)> : callback_sign<R, list8<P1, P2, P3, P4, P5, P6, P7, P8> >
   {
+    typedef callback_sign<R, list8<P1, P2, P3, P4, P5, P6, P7, P8> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1748,12 +1802,18 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const { return b_ ? (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6, p7, p8)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8) const {if (!b_)throw bad_function_call();  LP lp(p1, p2, p3, p4, p5, p6, p7, p8); return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9>
   struct callback<R(P1, P2, P3, P4, P5, P6, P7, P8, P9)> : callback_sign<R, list9<P1, P2, P3, P4, P5, P6, P7, P8, P9> >
   {
+    typedef callback_sign<R, list9<P1, P2, P3, P4, P5, P6, P7, P8, P9> > base;
+    
+    using base::b_;
+    using typename base::LP;
+    using typename base::Fn;
+
     callback() {}
 
     template<typename B> 
@@ -1762,7 +1822,7 @@ namespace bi
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
 
-    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const { b_ ? return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(LP(p1, p2, p3, p4, p5, p6, p7, p8, p9)) : throw bad_function_call(); }
+    R operator()(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8, P9 p9) const {if (!b_)throw bad_function_call();  LP lp(p1, p2, p3, p4, p5, p6, p7, p8, p9); return (b_->*(reinterpret_cast<Fn>(b_->invoke)))(lp);}
   };
 } // namespace bi
 
