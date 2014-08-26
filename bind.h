@@ -431,7 +431,7 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_]);
+      return dt[f](l[dt.a1_], l[dt.a2_]);
     }
 
     template<typename R, typename F, typename L>
@@ -666,21 +666,21 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); D &dt = d; //used C4189
-      return dt[f](l[dt.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
-      return b.eval(d);
+      return b.eval(dt);
     }
   };
 
@@ -725,21 +725,21 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_], l[dt.a7_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_], l[dt.a7_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
-      return b.eval(d);
+      return b.eval(dt);
     }
   };
 
@@ -784,21 +784,21 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_], l[dt.a7_], l[dt.a8_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_], l[dt.a7_], l[dt.a8_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
-      return b.eval(d);
+      return b.eval(dt);
     }
   };
 
@@ -843,21 +843,21 @@ namespace bi
     inline R operator()(type<R>, F &f, const L &l)
     {
       D &d = static_cast<D&>(*this); D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_], l[dt.a7_], l[dt.a8_], l[dt.a9_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator()(type<R>, F &f, const L &l) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d; //used C4189
-      return d[f](l[d.a1_], l[d.a2_], l[d.a3_], l[d.a4_], l[d.a5_], l[d.a6_], l[d.a7_], l[d.a8_], l[d.a9_]);
+      return dt[f](l[dt.a1_], l[dt.a2_], l[dt.a3_], l[dt.a4_], l[dt.a5_], l[dt.a6_], l[dt.a7_], l[dt.a8_], l[dt.a9_]);
     }
 
     template<typename R, typename F, typename L>
     inline R operator[](bind_t<R, F, L> &b) const
     {
       const D &d = static_cast<const D&>(*this); const D &dt = d;  //used C4189
-      return b.eval(d);
+      return b.eval(dt);
     }
   };
 
@@ -890,12 +890,8 @@ namespace bi
     static Argc<I> a9_() {  return Argc<I>(); }
   };
 
-#ifndef BI_BIND
-#define BI_BIND bind
-#endif
-
   template<typename R>
-  bind_t<R, R (*)(), list0> BI_BIND(R (*f)())
+  bind_t<R, R(*)(), list0> bind(R(*f)())
   {
     typedef R (*F)();
     typedef list0 L;
@@ -903,7 +899,7 @@ namespace bi
   }
 
   template<typename R, typename P1, typename A1>
-  bind_t<R, R (*)(P1), list1<A1> > BI_BIND(R (*f)(P1), A1 a1)
+  bind_t<R, R(*)(P1), list1<A1> > bind(R(*f)(P1), A1 a1)
   {
     typedef R (*F)(P1);
     typedef list1<A1> L;
@@ -911,7 +907,7 @@ namespace bi
   }
 
   template<typename R, typename P1, typename P2, typename A1, typename A2>
-  bind_t<R, R (*)(P1, P2), list2<A1, A2> > BI_BIND(R (*f)(P1, P2), A1 a1, A2 a2)
+  bind_t<R, R(*)(P1, P2), list2<A1, A2> > bind(R(*f)(P1, P2), A1 a1, A2 a2)
   {
     typedef R (*F)(P1, P2);
     typedef list2<A1, A2> L;
@@ -919,7 +915,7 @@ namespace bi
   }
 
   template<typename R, typename P1, typename P2, typename P3, typename A1, typename A2, typename A3>
-  bind_t<R, R (*)(P1, P2, P3), list3<A1, A2, A3> > BI_BIND(R (*f)(P1, P2, P3), A1 a1, A2 a2, A3 a3)
+  bind_t<R, R (*)(P1, P2, P3), list3<A1, A2, A3> > bind(R (*f)(P1, P2, P3), A1 a1, A2 a2, A3 a3)
   {
     typedef R (*F)(P1, P2, P3);
     typedef list3<A1, A2, A3> L;
@@ -927,7 +923,7 @@ namespace bi
   }
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename A1, typename A2, typename A3, typename A4>
-  bind_t<R, R (*)(P1, P2, P3, P4), list4<A1, A2, P3, A4> > BI_BIND(R (*f)(P1, P2, P3, P4), A1 a1, A2 a2, A3 a3, A4 a4)
+  bind_t<R, R (*)(P1, P2, P3, P4), list4<A1, A2, P3, A4> > bind(R (*f)(P1, P2, P3, P4), A1 a1, A2 a2, A3 a3, A4 a4)
   {
     typedef R (*F)(P1, P2, P3, P4);
     typedef list4<A1, A2, A3, A4> L;
@@ -935,7 +931,7 @@ namespace bi
   }
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename A1, typename A2, typename A3, typename A4, typename A5>
-  bind_t<R, R (*)(P1, P2, P3, P4, P5), list5<A1, A2, A3, A4, A5> > BI_BIND(R (*f)(P1, P2, P3, P4, P5), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
+  bind_t<R, R (*)(P1, P2, P3, P4, P5), list5<A1, A2, A3, A4, A5> > bind(R (*f)(P1, P2, P3, P4, P5), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
   {
     typedef R (*F)(P1, P2, P3, P4, P5);
     typedef list5<A1, A2, A3, A4, A5> L;
@@ -943,7 +939,7 @@ namespace bi
   }
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
-  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6), list6<A1, A2, A3, A4, A5, A6> > BI_BIND(R (*f)(P1, P2, P3, P4, P5, P6), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
+  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6), list6<A1, A2, A3, A4, A5, A6> > bind(R (*f)(P1, P2, P3, P4, P5, P6), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
   {
     typedef R (*F)(P1, P2, P3, P4, P5, P6);
     typedef list6<A1, A2, A3, A4, A5, A6> L;
@@ -951,14 +947,14 @@ namespace bi
   }
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
-  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6, P7), list7<A1, A2, A3, A4, A5, A6, A7> > BI_BIND(R (*f)(P1, P2, P3, P4, P5, P6, P7), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
+  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6, P7), list7<A1, A2, A3, A4, A5, A6, A7> > bind(R (*f)(P1, P2, P3, P4, P5, P6, P7), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
   {
     typedef R (*F)(P1, P2, P3, P4, P5, P6, P7);
     typedef list7<A1, A2, A3, A4, A5, A6, A7> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3, a4, a5, a6, a7));
   }
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8>
-  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6, P7, P8), list8<A1, A2, A3, A4, A5, A6, A7, A8> > BI_BIND(R (*f)(P1, P2, P3, P4, P5, P6, P7, P8), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
+  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6, P7, P8), list8<A1, A2, A3, A4, A5, A6, A7, A8> > bind(R (*f)(P1, P2, P3, P4, P5, P6, P7, P8), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
   {
     typedef R (*F)(P1, P2, P3, P4, P5, P6, P7, P8);
     typedef list8<A1, A2, A3, A4, A5, A6, A7, A8> L;
@@ -966,7 +962,7 @@ namespace bi
   }
 
   template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename P9, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9>
-  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6, P7, P8, P9), list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> > BI_BIND(R (*f)(P1, P2, P3, P4, P5, P6, P7, P8, P9), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
+  bind_t<R, R (*)(P1, P2, P3, P4, P5, P6, P7, P8, P9), list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> > bind(R (*f)(P1, P2, P3, P4, P5, P6, P7, P8, P9), A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
   {
     typedef R (*F)(P1, P2, P3, P4, P5, P6, P7, P8, P9);
     typedef list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> L;
@@ -974,147 +970,147 @@ namespace bi
   }
 
   template<typename F>
-  bind_t<type<F>, F, list0> BI_BIND(F f)
+  bind_t<type<F>, F, list0> bind(F f)
   {
     typedef list0 L;
     return bind_t<type<F>, F, L>(f, L());
   }
 
   template<typename R, typename F>
-  bind_t<R, F, list0> BI_BIND(const type<R>&, F f)
+  bind_t<R, F, list0> bind(const type<R>&, F f)
   {
     typedef list0 L;
     return bind_t<R, F, L>(f, L());
   }
 
   template<typename F, typename A1>
-  bind_t<type<F>, F, list1<A1> > BI_BIND(F f, A1 a1)
+  bind_t<type<F>, F, list1<A1> > bind(F f, A1 a1)
   {
     typedef list1<A1> L;
     return bind_t<type<F>, F, L>(f, L(a1));
   }
 
   template<typename R, typename F, typename A1>
-  bind_t<R, F, list1<A1> > BI_BIND(const type<R>&, F f, A1 a1)
+  bind_t<R, F, list1<A1> > bind(const type<R>&, F f, A1 a1)
   {
     typedef list1<A1> L;
     return bind_t<R, F, L>(f, L(a1));
   }
 
   template<typename F, typename A1, typename A2>
-  bind_t<type<F>, F, list2<A1, A2> > BI_BIND(F f, A1 a1, A2 a2)
+  bind_t<type<F>, F, list2<A1, A2> > bind(F f, A1 a1, A2 a2)
   {
     typedef list2<A1, A2> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2));
   }
 
   template<typename R, typename F, typename A1, typename A2>
-  bind_t<R, F, list2<A1, A2> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2)
+  bind_t<R, F, list2<A1, A2> > bind(const type<R>&, F f, A1 a1, A2 a2)
   {
     typedef list2<A1, A2> L;
     return bind_t<R, F, L>(f, L(a1, a2));
   }
 
   template<typename F, typename A1, typename A2, typename A3>
-  bind_t<type<F>, F, list3<A1, A2, A3> > BI_BIND(F f, A1 a1, A2 a2, A3 a3)
+  bind_t<type<F>, F, list3<A1, A2, A3> > bind(F f, A1 a1, A2 a2, A3 a3)
   {
     typedef list3<A1, A2, A3> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2, a3));
   }
 
   template<typename R, typename F, typename A1, typename A2, typename A3>
-  bind_t<R, F, list3<A1, A2, A3> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2, A3 a3)
+  bind_t<R, F, list3<A1, A2, A3> > bind(const type<R>&, F f, A1 a1, A2 a2, A3 a3)
   {
     typedef list3<A1, A2, A3> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3));
   }
 
   template<typename F, typename A1, typename A2, typename A3, typename A4>
-  bind_t<type<F>, F, list4<A1, A2, A3, A4> > BI_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4)
+  bind_t<type<F>, F, list4<A1, A2, A3, A4> > bind(F f, A1 a1, A2 a2, A3 a3, A4 a4)
   {
     typedef list4<A1, A2, A3, A4> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2, a3, a4));
   }
 
   template<typename R, typename F, typename A1, typename A2, typename A3, typename A4>
-  bind_t<R, F, list4<A1, A2, A3, A4> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4)
+  bind_t<R, F, list4<A1, A2, A3, A4> > bind(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4)
   {
     typedef list4<A1, A2, A3, A4> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3, a4));
   }
 
   template<typename F, typename A1, typename A2, typename A3, typename A4, typename A5>
-  bind_t<type<F>, F, list5<A1, A2, A3, A4, A5> > BI_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
+  bind_t<type<F>, F, list5<A1, A2, A3, A4, A5> > bind(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
   {
     typedef list5<A1, A2, A3, A4, A5> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2, a3, a4, a5));
   }
 
   template<typename R, typename F, typename A1, typename A2, typename A3, typename A4, typename A5>
-  bind_t<R, F, list5<A1, A2, A3, A4, A5> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
+  bind_t<R, F, list5<A1, A2, A3, A4, A5> > bind(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)
   {
     typedef list5<A1, A2, A3, A4, A5> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3, a4, a5));
   }
 
   template<typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
-  bind_t<type<F>, F, list6<A1, A2, A3, A4, A5, A6> > BI_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
+  bind_t<type<F>, F, list6<A1, A2, A3, A4, A5, A6> > bind(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
   {
     typedef list6<A1, A2, A3, A4, A5, A6> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2, a3, a4, a5, a6));
   }
 
   template<typename R, typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
-  bind_t<R, F, list6<A1, A2, A3, A4, A5, A6> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
+  bind_t<R, F, list6<A1, A2, A3, A4, A5, A6> > bind(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
   {
     typedef list6<A1, A2, A3, A4, A5, A6> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3, a4, a5, a6));
   }
 
   template<typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
-  bind_t<type<F>, F, list7<A1, A2, A3, A4, A5, A6, A7> > BI_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
+  bind_t<type<F>, F, list7<A1, A2, A3, A4, A5, A6, A7> > bind(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
   {
     typedef list7<A1, A2, A3, A4, A5, A6, A7> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2, a3, a4, a5, a6, a7));
   }
 
   template<typename R, typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
-  bind_t<R, F, list7<A1, A2, A3, A4, A5, A6, A7> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
+  bind_t<R, F, list7<A1, A2, A3, A4, A5, A6, A7> > bind(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7)
   {
     typedef list7<A1, A2, A3, A4, A5, A6, A7> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3, a4, a5, a6, a7));
   }
 
   template<typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8>
-  bind_t<type<F>, F, list8<A1, A2, A3, A4, A5, A6, A7, A8> > BI_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
+  bind_t<type<F>, F, list8<A1, A2, A3, A4, A5, A6, A7, A8> > bind(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
   {
     typedef list8<A1, A2, A3, A4, A5, A6, A7, A8> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2, a3, a4, a5, a6, a7, a8));
   }
 
   template<typename R, typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8>
-  bind_t<R, F, list8<A1, A2, A3, A4, A5, A6, A7, A8> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
+  bind_t<R, F, list8<A1, A2, A3, A4, A5, A6, A7, A8> > bind(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8)
   {
     typedef list8<A1, A2, A3, A4, A5, A6, A7, A8> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3, a4, a5, a6, a7, a8));
   }
 
   template<typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9>
-  bind_t<type<F>, F, list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> > BI_BIND(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
+  bind_t<type<F>, F, list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> > bind(F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
   {
     typedef list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> L;
     return bind_t<type<F>, F, L>(f, L(a1, a2, a3, a4, a5, a6, a7, a8, a9));
   }
 
   template<typename R, typename F, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename A9>
-  bind_t<R, F, list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> > BI_BIND(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
+  bind_t<R, F, list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> > bind(const type<R>&, F f, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9)
   {
     typedef list9<A1, A2, A3, A4, A5, A6, A7, A8, A9> L;
     return bind_t<R, F, L>(f, L(a1, a2, a3, a4, a5, a6, a7, a8, a9));
   }
 
   template<typename R, typename C, typename C1>
-  bind_t<R, f_cplus_0<R, C, R (C::*)()>, list1<C1> > BI_BIND(R (C::*f)(), C1 c1)
+  bind_t<R, f_cplus_0<R, C, R (C::*)()>, list1<C1> > bind(R (C::*f)(), C1 c1)
   {
     typedef f_cplus_0<R, C, R (C::*)()> F;
     typedef list1<C1> L;
@@ -1122,7 +1118,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename C1>
-  bind_t<R, f_cplus_0<R, C, R (C::*)() const>, list1<C1> > BI_BIND(R (C::*f)() const, C1 c1)
+  bind_t<R, f_cplus_0<R, C, R (C::*)() const>, list1<C1> > bind(R (C::*f)() const, C1 c1)
   {
     typedef f_cplus_0<R, C, R (C::*)() const> F;
     typedef list1<C1> L;
@@ -1130,7 +1126,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename C1, typename P1>
-  bind_t<R, f_cplus_1<R, C, R (C::*)(A1)>, list2<C1, P1> > BI_BIND(R (C::*f)(A1), C1 c1, P1 p2)
+  bind_t<R, f_cplus_1<R, C, R (C::*)(A1)>, list2<C1, P1> > bind(R (C::*f)(A1), C1 c1, P1 p2)
   {
     typedef f_cplus_1<R, C, R (C::*)(A1)> F;
     typedef list2<C1, P1> L;
@@ -1138,7 +1134,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename C1, typename P1>
-  bind_t<R, f_cplus_1<R, C, R (C::*)(A1) const>, list2<C1, P1> > BI_BIND(R (C::*f)(A1) const, C1 c1, P1 p1)
+  bind_t<R, f_cplus_1<R, C, R (C::*)(A1) const>, list2<C1, P1> > bind(R (C::*f)(A1) const, C1 c1, P1 p1)
   {
     typedef f_cplus_1<R, C, R (C::*)(A1) const> F;
     typedef list2<C1, P1> L;
@@ -1146,7 +1142,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename C1, typename P1, typename P2>
-  bind_t<R, f_cplus_2<R, C, R (C::*)(A1,A2)>, list3<C1, P1, P2> > BI_BIND(R (C::*f)(A1,A2), C1 c1, P1 p1, P2 p2)
+  bind_t<R, f_cplus_2<R, C, R (C::*)(A1,A2)>, list3<C1, P1, P2> > bind(R (C::*f)(A1,A2), C1 c1, P1 p1, P2 p2)
   {
     typedef f_cplus_2<R, C, R (C::*)(A1,A2)> F;
     typedef list3<C1, P1, P2> L;
@@ -1154,7 +1150,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename C1, typename P1, typename P2>
-  bind_t<R, f_cplus_2<R, C, R (C::*)(A1,A2) const>, list3<C1, P1, P2> > BI_BIND(R (C::*f)(A1,A2) const, C1 c1, P1 p1, P2 p2)
+  bind_t<R, f_cplus_2<R, C, R (C::*)(A1,A2) const>, list3<C1, P1, P2> > bind(R (C::*f)(A1,A2) const, C1 c1, P1 p1, P2 p2)
   {
     typedef f_cplus_2<R, C, R (C::*)(A1,A2) const> F;
     typedef list3<C1, P1, P2> L;
@@ -1162,7 +1158,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename C1, typename P1, typename P2, typename P3>
-  bind_t<R, f_cplus_3<R, C, R (C::*)(A1,A2,A3)>, list4<C1, P1, P2, P3> > BI_BIND(R (C::*f)(A1,A2,A3), C1 c1, P1 p1, P2 p2, P3 p3)
+  bind_t<R, f_cplus_3<R, C, R (C::*)(A1,A2,A3)>, list4<C1, P1, P2, P3> > bind(R (C::*f)(A1,A2,A3), C1 c1, P1 p1, P2 p2, P3 p3)
   {
     typedef f_cplus_3<R, C, R (C::*)(A1,A2,A3)> F;
     typedef list4<C1, P1, P2, P3> L;
@@ -1170,7 +1166,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename C1, typename P1, typename P2, typename P3>
-  bind_t<R, f_cplus_3<R, C, R (C::*)(A1,A2,A3) const>, list4<C1, P1, P2, P3> > BI_BIND(R (C::*f)(A1,A2,A3) const, C1 c1, P1 p1, P2 p2, P3 p3)
+  bind_t<R, f_cplus_3<R, C, R (C::*)(A1,A2,A3) const>, list4<C1, P1, P2, P3> > bind(R (C::*f)(A1,A2,A3) const, C1 c1, P1 p1, P2 p2, P3 p3)
   {
     typedef f_cplus_3<R, C, R (C::*)(A1,A2,A3) const> F;
     typedef list4<C1, P1, P2, P3> L;
@@ -1178,7 +1174,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename C1, typename P1, typename P2, typename P3, typename P4>
-  bind_t<R, f_cplus_4<R, C, R (C::*)(A1,A2,A3,A4)>, list5<C1, P1, P2, P3, P4> > BI_BIND(R (C::*f)(A1,A2,A3,A4), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4)
+  bind_t<R, f_cplus_4<R, C, R (C::*)(A1,A2,A3,A4)>, list5<C1, P1, P2, P3, P4> > bind(R (C::*f)(A1,A2,A3,A4), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4)
   {
     typedef f_cplus_4<R, C, R (C::*)(A1,A2,A3,A4)> F;
     typedef list5<C1, P1, P2, P3, P4> L;
@@ -1186,7 +1182,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename C1, typename P1, typename P2, typename P3, typename P4>
-  bind_t<R, f_cplus_4<R, C, R (C::*)(A1,A2,A3,A4) const>, list5<C1, P1, P2, P3, P4> > BI_BIND(R (C::*f)(A1,A2,A3,A4) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4)
+  bind_t<R, f_cplus_4<R, C, R (C::*)(A1,A2,A3,A4) const>, list5<C1, P1, P2, P3, P4> > bind(R (C::*f)(A1,A2,A3,A4) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4)
   {
     typedef f_cplus_4<R, C, R (C::*)(A1,A2,A3,A4) const> F;
     typedef list5<C1, P1, P2, P3, P4> L;
@@ -1194,7 +1190,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5>
-  bind_t<R, f_cplus_5<R, C, R (C::*)(A1,A2,A3,A4,A5)>, list6<C1, P1, P2, P3, P4, P5> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
+  bind_t<R, f_cplus_5<R, C, R (C::*)(A1,A2,A3,A4,A5)>, list6<C1, P1, P2, P3, P4, P5> > bind(R (C::*f)(A1,A2,A3,A4,A5), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
   {
     typedef f_cplus_5<R, C, R (C::*)(A1,A2,A3,A4,A5)> F;
     typedef list6<C1, P1, P2, P3, P4, P5> L;
@@ -1202,7 +1198,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5>
-  bind_t<R, f_cplus_5<R, C, R (C::*)(A1,A2,A3,A4,A5) const>, list6<C1, P1, P2, P3, P4, P5> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
+  bind_t<R, f_cplus_5<R, C, R (C::*)(A1,A2,A3,A4,A5) const>, list6<C1, P1, P2, P3, P4, P5> > bind(R (C::*f)(A1,A2,A3,A4,A5) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5)
   {
     typedef f_cplus_5<R, C, R (C::*)(A1,A2,A3,A4,A5) const> F;
     typedef list6<C1, P1, P2, P3, P4, P5> L;
@@ -1210,7 +1206,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-  bind_t<R, f_cplus_6<R, C, R (C::*)(A1,A2,A3,A4,A5,A6)>, list7<C1, P1, P2, P3, P4, P5, P6> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5,A6), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
+  bind_t<R, f_cplus_6<R, C, R (C::*)(A1,A2,A3,A4,A5,A6)>, list7<C1, P1, P2, P3, P4, P5, P6> > bind(R (C::*f)(A1,A2,A3,A4,A5,A6), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
   {
     typedef f_cplus_6<R, C, R (C::*)(A1,A2,A3,A4,A5,A6)> F;
     typedef list7<C1, P1, P2, P3, P4, P5, P6> L;
@@ -1218,7 +1214,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-  bind_t<R, f_cplus_6<R, C, R (C::*)(A1,A2,A3,A4,A5,A6) const>, list7<C1, P1, P2, P3, P4, P5, P6> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5,A6) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
+  bind_t<R, f_cplus_6<R, C, R (C::*)(A1,A2,A3,A4,A5,A6) const>, list7<C1, P1, P2, P3, P4, P5, P6> > bind(R (C::*f)(A1,A2,A3,A4,A5,A6) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6)
   {
     typedef f_cplus_6<R, C, R (C::*)(A1,A2,A3,A4,A5,A6) const> F;
     typedef list7<C1, P1, P2, P3, P4, P5, P6> L;
@@ -1226,7 +1222,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-  bind_t<R, f_cplus_7<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7)>, list8<C1, P1, P2, P3, P4, P5, P6, P7> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5,A6,A7), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
+  bind_t<R, f_cplus_7<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7)>, list8<C1, P1, P2, P3, P4, P5, P6, P7> > bind(R (C::*f)(A1,A2,A3,A4,A5,A6,A7), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
   {
     typedef f_cplus_7<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7)> F;
     typedef list8<C1, P1, P2, P3, P4, P5, P6, P7> L;
@@ -1234,7 +1230,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7>
-  bind_t<R, f_cplus_7<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7) const>, list8<C1, P1, P2, P3, P4, P5, P6, P7> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5,A6,A7) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
+  bind_t<R, f_cplus_7<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7) const>, list8<C1, P1, P2, P3, P4, P5, P6, P7> > bind(R (C::*f)(A1,A2,A3,A4,A5,A6,A7) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7)
   {
     typedef f_cplus_7<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7) const> F;
     typedef list8<C1, P1, P2, P3, P4, P5, P6, P7> L;
@@ -1242,7 +1238,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-  bind_t<R, f_cplus_8<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8)>, list9<C1, P1, P2, P3, P4, P5, P6, P7, P8> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5,A6,A7,A8), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8)
+  bind_t<R, f_cplus_8<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8)>, list9<C1, P1, P2, P3, P4, P5, P6, P7, P8> > bind(R (C::*f)(A1,A2,A3,A4,A5,A6,A7,A8), C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8)
   {
     typedef f_cplus_8<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8)> F;
     typedef list9<C1, P1, P2, P3, P4, P5, P6, P7, P8> L;
@@ -1250,7 +1246,7 @@ namespace bi
   }
 
   template<typename R, typename C, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8, typename C1, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8>
-  bind_t<R, f_cplus_8<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8) const>, list9<C1, P1, P2, P3, P4, P5, P6, P7, P8> > BI_BIND(R (C::*f)(A1,A2,A3,A4,A5,A6,A7,A8) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8)
+  bind_t<R, f_cplus_8<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8) const>, list9<C1, P1, P2, P3, P4, P5, P6, P7, P8> > bind(R (C::*f)(A1,A2,A3,A4,A5,A6,A7,A8) const, C1 c1, P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8)
   {
     typedef f_cplus_8<R, C, R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8) const> F;
     typedef list9<C1, P1, P2, P3, P4, P5, P6, P7, P8> L;
@@ -1637,7 +1633,7 @@ namespace bi
     callback() {}
 
     template<typename B> 
-    callback(const B &b) { base::b_ = new bind_bundling<B, typename base::LP>(b); }
+    callback(const B &b) { b_ = new bind_bundling<B, typename LP>(b); }
 
     template<typename B> 
     callback& operator=(const B &b) { delete b_; b_ = new bind_bundling<B, LP>(b); return *this; }
